@@ -53,7 +53,7 @@ void intergrateIMU(const std::vector<IMUData>& imu_data,
         q = q * dq;
         q.normalize();
 
-        // 使用旋转矩阵， 其中w.normalized()是单位向量可以代表旋转轴，w.norm() * dt代表旋转角度
+        // 使用旋转矩阵， 其中w.normalized()是单位向量可以代表旋转轴，w.norm() * dt代表旋转角度,角速度的方向代表旋转方向
         // Eigen::Matrix3d R = Eigen::AngleAxisd(w.norm() * dt, w.normalized()).toRotationMatrix();
         // Eigen::Quaterniond dq(R);
         // q = q * dq;
