@@ -112,8 +112,29 @@ transformation = icp(source_points, target_points)
 ```
 
 ---
+### **5. RANSAC**
+**题目描述**：
+使用RANSAC算法在带有离群点的2D点中拟合出一条直线
 
-### **5. 回环检测：词袋模型**
+**输入**：
+- `points_noise`: 待拟合的具有离群值的点
+
+**输出**：
+- `line`: 直角坐标中的直线表达式 (y = ax + b)
+
+
+**示例**：
+```C++
+    std::vector<Point> points_noise = {
+        {0, 1}, {1, 3}, {2, 5}, {3, 7}, {4, 9}, {5, 11}, {6, 13}, {7, 15}, {8, 17}, {9, 19}, // 直线 y = 2x + 1
+        {1, 10}, {3, 1}, {5, 20}, {7, 5}, {9, 25} // 离群点
+    };
+    Line line = ransacFitting(points_noise);
+```
+
+---
+
+### **6. 回环检测：词袋模型**
 **题目描述**：
 实现一个简单的词袋模型（Bag of Words, BoW）用于回环检测。给定一组图像特征描述符，计算它们之间的相似度。
 
@@ -141,7 +162,7 @@ similarities = bow_loop_closure(descriptors_list, query_descriptor)
 
 ---
 
-### **6. 图优化：位姿图优化**
+### **7. 图优化：位姿图优化**
 **题目描述**：
 实现一个简单的位姿图优化（Pose Graph Optimization, PGO）算法，优化机器人轨迹的位姿。假设位姿图由节点（位姿）和边（相对位姿约束）组成。
 
