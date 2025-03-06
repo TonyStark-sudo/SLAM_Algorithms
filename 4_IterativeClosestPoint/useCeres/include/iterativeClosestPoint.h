@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
@@ -20,7 +21,9 @@ public:
                               std::vector<cv::KeyPoint> &kps_2, 
                               std::vector<cv::DMatch> &matches);
 
-    std::vector<cv::Point3d> pixel2cam(const std::vector<cv::Point2d> &p, const cv::Mat &K);
+    void get_3D_points(std::vector<cv::Point3f>& points_1, std::vector<cv::Point3f>& points_2, 
+                       std::vector<cv::KeyPoint> &kps_1, std::vector<cv::KeyPoint> &kps_2,
+                       std::vector<cv::DMatch> &matches);
 
 private:
     const cv::Mat img_1;
