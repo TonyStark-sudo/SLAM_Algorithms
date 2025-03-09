@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
                   << "Usage: ./build/icp ../data/1.png ../data/2.png ../data/1_depth.png ../data/2_depth.png";
         return;
     }
-
+    std::cout << "Creating ICP Problem ...\n";
     cv::Mat img_1 = cv::imread(argv[1], cv::IMREAD_COLOR);
     cv::Mat img_2 = cv::imread(argv[2], cv::IMREAD_COLOR);
     cv::Mat depth_1 = cv::imread(argv[3], cv::IMREAD_UNCHANGED);
@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     createICPProblem.find_feature_matches(kpts1, kpts2, matches);
     createICPProblem.get_3D_points(points1_3d, points2_3d, kpts1, kpts2, matches);
 
+    std::cout << "Creat ICP Problem done !!!\n";
     /* code */
     return 0;
 }
