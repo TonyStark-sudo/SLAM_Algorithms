@@ -1,5 +1,92 @@
 #include "iterativeClosestPoint.h"
 
+struct Point3DTransError {
+    Point3DTransError(const cv::Point3f& p1_, const cv::Point3f& p2_) : p1(p1_), p2(p2_) {}
+    
+    template <typename T>
+    bool operator() (const T* const trans, 
+                     const T* const rota, 
+                     T* residual) const {
+        // T p1_t[3] = {p1.x, p1.y, p1.z};
+        T p1_in_1[3] = {T(p1.x), T(p1.y), T(p1.z)};
+        T p1_in_2[3];
+
+        ceres::AngleAxisRotatePoint(rota, p1_in_1, p1_in_2);
+        p1_in_2[0] += trans[0];
+        p1_in_2[1] += trans[1];
+        p1_in_2[2] += trans[2];
+
+        residual[0] = p1_in_2[0] - T(p2.x);
+        residual[1] = p1_in_2[1] - T(p2.y);
+        residual[2] = p1_in_2[2] - T(p2.z);
+
+        return true;                
+    }
+
+    static ceres::CostFunction* Create(const cv::Point3f p1,
+                                       const cv::Point3f p2) {
+        return (new ceres::AutoDiffCostFunction<Point3DTransError, 3, 3, 3>(new Point3DTransError(p1, p2)));
+    }
+
+    const cv::Point3f p1;
+    const cv::Point3f p2;
+};
+
+void BundleAdjustment::bundleAdjustment() {
+    ceres::Problem problem;
+    for (size_t i = 0; i < points_1.size(); i++) {
+        ceres::CostFunction* costfunction = Point3DTransError::Create(points_1[i], points_2[i]);
+        problem.AddResidualBlock(costfunction, NULL, t_init, q_init);
+    }
+
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
+    options.minimizer_progress_to_stdout = true;
+
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+    std::cout << summary.FullReport() << std::endl;
+}
+
+void BundleAdjustment::getInitiValue() {
+    t_init = new double[3];
+    q_init = new double[3];
+    int size = points_1.size();
+    cv::Point3f center_1(0, 0, 0);
+    cv::Point3f center_2(0, 0, 0);
+    for (int i = 0; i < size; i++) {
+        center_1 += points_1[i];
+        center_2 += points_2[i];
+    }
+
+    // center_1 *= 1 / size;
+    // center_2 *= 1 / size;
+    center_1 *= 1.0 / size;
+    center_2 *= 1.0 / size;
+
+    // std::cout << "center_1: " 
+    // << "(" << center_1.x << ", " << center_1.y << ", " << center_1.z << ")\n";
+    // std::cout << "center_2: " 
+    // << "(" << center_2.x << ", " << center_2.y << ", " << center_2.z << ")\n";
+
+    t_init[0] = (center_1.x - center_2.x);
+    t_init[1] = (center_1.y - center_2.y);
+    t_init[2] = (center_1.z - center_2.z);
+    
+    // t_init[0] = 2;
+    // t_init[1] = 2;
+    // t_init[2] = 2;
+
+    std::cout << "t_init: " 
+    << "(" << t_init[0] << ", " << t_init[1] << ", " << t_init[2] << ")\n";
+
+    q_init[0] = 0;
+    q_init[1] = 0;
+    q_init[2] = 0;
+
+
+}
+
 void CreateICPProblem::find_feature_matches(std::vector<cv::KeyPoint> &kps_1, 
                                             std::vector<cv::KeyPoint> &kps_2, 
                                             std::vector<cv::DMatch> &matches) {
