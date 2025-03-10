@@ -12,6 +12,7 @@ struct Point {
     double y;
 };
 
+// 计算点到直线的距离
 double computeDistance(Line line, Point point) {
     return std::abs(line.a * point.x - point.y + line.b) /
            std::sqrt(line.a * line.a + 1);

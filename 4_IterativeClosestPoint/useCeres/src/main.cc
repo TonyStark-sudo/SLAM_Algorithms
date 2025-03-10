@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     google::InitGoogleLogging(argv[0]);
 
+    std::cout << "Creating ICP Problem ...\n";
     cv::Mat img_1 = cv::imread(argv[1], cv::IMREAD_COLOR);
     cv::Mat img_2 = cv::imread(argv[2], cv::IMREAD_COLOR);
     cv::Mat depth_1 = cv::imread(argv[3], cv::IMREAD_UNCHANGED);
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
 
     std::cout << "Translation vector: " << tran.transpose() << std::endl;
     std::cout << "Rotation quaternion: " << rota.coeffs().transpose() << std::endl;
+    std::cout << "Creat ICP Problem done !!!\n";
     /* code */
     return 0;
 }
