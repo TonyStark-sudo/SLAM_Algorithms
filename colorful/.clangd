@@ -1,0 +1,9 @@
+CompileFlags:
+  Add:
+    - --cuda-path=/data/cuda/cuda-11.8/cuda
+    - -I/data/cuda/cuda-11.8/cuda/include
+    - -I/data/ws/auto_labeling/road_reconstruction/colorful/include
+    - -I/usr/include/eigen3
+    - -I/usr/include/pcl-1.10
+    - -I/usr/include/opencv4
+
