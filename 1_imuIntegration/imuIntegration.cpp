@@ -70,14 +70,11 @@ void intergrateIMU(const std::vector<IMUData>& imu_data,
         // q = q * dq;
         // q.normalize();
 
-        Eigen::Vector3d acc = imu_data[i - 1].linear_acc - gravity;
+        Eigen::Vector3d acc_world = q * imu_data[i - 1].linear_acc - gravity;
 
         // 为什么四元数和三维向量可以直接 * 操作？
         // 因为Eigen库重载了四元数和向量之间的乘法运算符，当写q * acc时，Eigen会自动将
         // 向量acc转换为四元数形式，然后执行四元数与向量的旋转计算，最后返回旋转后的向量
-
-        Eigen::Vector3d acc_world = q * acc;
-
         v += acc_world * dt;
         p += v * dt + 0.5 * acc_world * dt * dt;   
     }
