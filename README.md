@@ -13,7 +13,9 @@ The required third-party libraries are as follows：
 
 * Eigen3
 * Ceres
-* opencv
+* opencv      
+* g2o
+* gtsam
 
 ### Related
 [Ceres Solver](http://ceres-solver.org/)
