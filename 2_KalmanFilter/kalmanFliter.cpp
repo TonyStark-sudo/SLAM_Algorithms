@@ -63,6 +63,9 @@ private:
     double dt_;
     
     Eigen::VectorXd state_;
+    Eigen::Matrix<double, 2, 2> m22;
+    Eigen::Matrix<float, 3, 3> Mat33{Eigen::Matrix<float, 3, 3>::Zero()};
+    Eigen::Matrix<double, 6, 6> jacobi;
     Eigen::MatrixXd P_;
     Eigen::MatrixXd F_;
     Eigen::MatrixXd H_;
