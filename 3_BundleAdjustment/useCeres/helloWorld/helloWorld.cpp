@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     // AutoDiffCostFunction模版参数<自定义代价函数， 输出残差dim， 优化变量dim>(自定义代价类的实例)
     ceres::CostFunction* costfunction = 
         new ceres::AutoDiffCostFunction<CostFunctor, 1, 1>(new CostFunctor()); // 
+    // ceres::CostFunction* costfunction = 
+        // new ceres::NumericDiffCostFunction<CostFunctor, ceres::CENTRAL, 1, 1>(new CostFunctor());
     problem.AddResidualBlock(costfunction, NULL, &x);
 
     // 配置运行求解器
